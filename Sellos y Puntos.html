@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sellos y Puntos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--mint:#BAF2D7;--petrol:#487F85;--bg:#080D10;--panel:#102126;--teal:#39AFA0;--text:#F2F7F5;--muted:#9BB1B5;--line:#244047;--cream:#F5D58A;
+color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:20px}
+header{background:var(--mint);color:var(--bg)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.brand{font-weight:800;font-size:1.25rem;color:var(--petrol);letter-spacing:-.01em}
+.who{display:flex;align-items:center;gap:12px;font-size:.95rem}
+.btn{border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;background:var(--mint);color:var(--bg)}
+.btn.go{background:var(--teal);color:var(--bg)}
+.btn.alt{background:var(--cream);color:var(--bg)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.sm{padding:6px 10px;font-size:.85rem;border-radius:8px}
+.btn.danger{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+header .btn.ghost{border-color:var(--petrol);color:var(--bg)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+h1,h2,h3{margin:0;color:var(--mint);letter-spacing:-.01em}
+h2{font-size:1.15rem}
+.muted{color:var(--muted)}
+input,select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input::placeholder{color:var(--muted)}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+/* login */
+.login{min-height:calc(100vh - 60px);display:grid;place-items:center;padding:20px}
+.login .card{width:100%;max-width:400px;display:grid;gap:14px}
+.login h1{font-size:2rem;color:var(--mint)}
+.err{color:var(--cream);font-size:.9rem;min-height:1.3em}
+.hint{border-top:1px solid var(--line);padding-top:12px;font-size:.85rem;color:var(--muted)}
+.hint b{color:var(--text);font-weight:600}
+/* user */
+.grid{display:grid;gap:16px;margin-top:20px}
+@media(min-width:760px){.grid.two{grid-template-columns:1fr 1.3fr}}
+.points{font-size:4.5rem;font-weight:800;line-height:1;color:var(--mint)}
+.bar{height:10px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:14px 0 6px}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:99px}
+.stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.slot{aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;color:var(--line)}
+.slot.on{border:2px solid var(--mint);background:var(--mint);color:var(--bg)}
+.slot.gift{border-color:var(--cream);color:var(--cream)}
+.slot.gift.on{background:var(--cream);color:var(--bg)}
+.slot svg{width:55%;height:55%}
+.hist{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:0}
+.hist li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:.92rem}
+.pos{color:var(--mint)}.neg{color:var(--cream)}
+/* admin */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.stats .card{padding:14px}
+.stats b{display:block;font-size:1.8rem;color:var(--mint);line-height:1.1}
+.urow{display:grid;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
+.urow:first-child{border-top:0}
+.uhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.uhead b{font-size:1.05rem}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctrls input{width:80px;padding:6px 8px}
+.mini{display:flex;gap:4px;align-items:center}
+.mini i{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--line)}
+.mini i.on{background:var(--mint);border-color:var(--mint)}
+.form{display:grid;gap:10px}
+@media(min-width:760px){.form{grid-template-columns:repeat(3,1fr) 1.2fr 1fr auto;align-items:end}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--teal);padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="brand">Sellos y Puntos</span><div class="who" id="who"></div></div></header>
+<main id="app"></main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://tvdxfezmqjzevbtdnpif.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_zZSIDKZ3mTYdA2rApWyyAg_XWQrP9nm';
+const MAX=10,GOAL=500;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const GIFT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/></svg>';
+let db=null,profile=null,users=[],movements=[];
+
+function toast(message){
+  const el=$('#toast');el.textContent=message;el.classList.add('show');
+  clearTimeout(toast.timeout);toast.timeout=setTimeout(()=>el.classList.remove('show'),2600);
+}
+function showError(message,target='#err'){
+  const el=$(target);
+  if(el)el.textContent=message;
+  else toast(message);
+}
+function configIsMissing(){
+  return SUPABASE_URL.includes('TU-PROYECTO')||SUPABASE_ANON_KEY.includes('TU-CLAVE-PUBLICA');
+}
+function renderSetup(){
+  $('#who').innerHTML='';
+  $('#app').innerHTML=`<div class="login"><section class="card">
+    <h1>Configurá Supabase</h1>
+    <p class="muted" style="margin:0">En el código de esta página, reemplazá <b>TU-PROYECTO</b> y <b>TU-CLAVE-PUBLICA-ANON</b> por los datos de tu proyecto de Supabase.</p>
+    <p class="hint">Encontrás la URL y la clave pública en Supabase → Project Settings → API. No uses la clave <b>service_role</b> en esta página.</p>
+  </section></div>`;
+}
+function renderLogin(){
+  $('#who').innerHTML='';
+  $('#app').innerHTML=`<div class="login"><form class="card" id="lf" autocomplete="on">
+    <h1>Bienvenido</h1><p class="muted" style="margin:0">Ingresá con el correo y la contraseña de tu cuenta.</p>
+    <div><label for="email">Correo electrónico</label><input id="email" type="email" autocomplete="username" required></div>
+    <div><label for="password">Contraseña</label><input id="password" type="password" autocomplete="current-password" required></div>
+    <div class="err" id="err" aria-live="polite"></div>
+    <button class="btn" type="submit">Ingresar</button>
+    <button class="btn ghost" id="show-signup" type="button">Crear una cuenta nueva</button>
+    <div class="hint">Las cuentas de administrador ingresan aquí también; sus permisos dependen del rol asignado a su perfil.</div>
+  </form></div>`;
+  $('#lf').onsubmit=async event=>{
+    event.preventDefault();
+    const button=$('#lf button[type="submit"]');button.disabled=true;showError('');
+    const {error}=await db.auth.signInWithPassword({
+      email:$('#email').value.trim(),password:$('#password').value
+    });
+    button.disabled=false;
+    if(error){showError('No se pudo iniciar sesión. Revisá el correo y la contraseña.');return}
+    try{await loadProfile()}
+    catch(error){showError(`No se pudieron cargar los datos de la cuenta: ${error.message}`)}
+  };
+  $('#show-signup').onclick=renderSignup;
+}
+function renderSignup(){
+  $('#who').innerHTML='';
+  $('#app').innerHTML=`<div class="login"><form class="card" id="sf" autocomplete="on">
+    <h1>Crear cuenta</h1><p class="muted" style="margin:0">Registrate para empezar a sumar puntos y sellos.</p>
+    <div><label for="signup-name">Nombre completo</label><input id="signup-name" autocomplete="name" required></div>
+    <div><label for="signup-username">Usuario</label><input id="signup-username" autocomplete="username" minlength="3" maxlength="30" required></div>
+    <div><label for="signup-email">Correo electrónico</label><input id="signup-email" type="email" autocomplete="email" required></div>
+    <div><label for="signup-password">Contraseña</label><input id="signup-password" type="password" autocomplete="new-password" minlength="6" required></div>
+    <div class="err" id="signup-err" aria-live="polite"></div>
+    <button class="btn go" type="submit">Registrarme</button>
+    <button class="btn ghost" id="back-to-login" type="button">Volver a ingresar</button>
+    <div class="hint">Las cuentas nuevas se crean como clientes. Un administrador puede asignar permisos de administrador después del registro.</div>
+  </form></div>`;
+  $('#back-to-login').onclick=renderLogin;
+  $('#sf').onsubmit=async event=>{
+    event.preventDefault();
+    const button=$('#sf button[type="submit"]');button.disabled=true;showError('','#signup-err');
+    const username=$('#signup-username').value.trim().toLowerCase();
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      showError('El usuario debe tener entre 3 y 30 caracteres: letras, números, punto, guion o guion bajo.','#signup-err');
+      button.disabled=false;return;
+    }
+    const {data,error}=await db.auth.signUp({
+      email:$('#signup-email').value.trim(),
+      password:$('#signup-password').value,
+      options:{data:{
+        username,
+        full_name:$('#signup-name').value.trim()
+      }}
+    });
+    button.disabled=false;
+    if(error){showError(`No se pudo crear la cuenta: ${error.message}`,'#signup-err');return}
+    if(data.session){
+      try{await loadProfile()}
+      catch(loadError){showError(`La cuenta se creó, pero no se pudieron cargar sus datos: ${loadError.message}`,'#signup-err')}
+      return;
+    }
+    $('#app').innerHTML=`<div class="login"><section class="card">
+      <h1>Revisá tu correo</h1>
+      <p class="muted">La cuenta se creó. Si la confirmación de correo está activada en Supabase, confirmá el mensaje que te enviamos y después iniciá sesión.</p>
+      <button class="btn" id="signup-done" type="button">Volver a ingresar</button>
+    </section></div>`;
+    $('#signup-done').onclick=renderLogin;
+  };
+}
+async function loadProfile(){
+  const {data:{session},error:sessionError}=await db.auth.getSession();
+  if(sessionError)throw sessionError;
+  if(!session){profile=null;users=[];movements=[];return renderLogin()}
+  const {data:{user},error:authError}=await db.auth.getUser();
+  if(authError)throw authError;
+  if(!user){profile=null;users=[];movements=[];return renderLogin()}
+  const {data,error}=await db.from('profiles')
+    .select('id,username,full_name,email,role,points,stamps')
+    .eq('id',user.id).single();
+  if(error)throw error;
+  profile=data;
+  if(profile.role==='admin'){
+    const result=await db.from('profiles')
+      .select('id,username,full_name,email,role,points,stamps')
+      .eq('role','member').order('full_name');
+    if(result.error)throw result.error;
+    users=result.data;
+  }else{
+    const result=await db.from('movements')
+      .select('id,type,points_delta,stamps_delta,description,created_at')
+      .eq('user_id',user.id).order('created_at',{ascending:false}).limit(20);
+    if(result.error)throw result.error;
+    movements=result.data;
+  }
+  render();
+}
+function render(){
+  if(!profile)return renderLogin();
+  const name=profile.full_name||profile.username;
+  $('#who').innerHTML=`<span>${esc(name)}</span><button class="btn ghost sm" data-act="out">Cerrar sesión</button>`;
+  if(profile.role==='admin')renderAdmin();
+  else renderMember();
+}
+function renderMember(){
+  const pct=Math.min(100,Math.round(profile.points/GOAL*100));
+  const slots=Array.from({length:MAX},(_,i)=>{
+    const on=i<profile.stamps,last=i===MAX-1;
+    return `<div class="slot ${on?'on':''} ${last?'gift':''}">${last?GIFT:(on?CHECK:'')}</div>`;
+  }).join('');
+  const left=MAX-profile.stamps;
+  $('#app').innerHTML=`<div class="wrap"><h1>Hola, ${esc((profile.full_name||profile.username).split(' ')[0])}</h1>
+  <div class="grid two">
+    <section class="card"><h2>Tus puntos (Delivery)</h2>
+      <div class="points" style="margin-top:12px">${profile.points}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="muted">${profile.points>=GOAL?'Ya podés canjear tu premio. Pedíselo al administrador.':`Te faltan ${GOAL-profile.points} puntos para el próximo premio.`}</div>
+    </section>
+    <section class="card"><h2>Tu tarjeta de sellos (Consumo en el local físico)</h2>
+      <div class="stamps">${slots}</div>
+      <p class="muted" style="margin:14px 0 0">${profile.stamps>=MAX?'Tarjeta completa. Pedí tu regalo.':`${profile.stamps} de ${MAX} sellos. Con ${left===1?'1 sello más':left+' sellos más'} ganás tu regalo.`}</p>
+    </section>
+  </div>
+  <section class="card" style="margin-top:16px"><h2>Movimientos</h2>
+    ${movements.length?`<ul class="hist">${movements.map(m=>{
+      const date=new Date(m.created_at).toLocaleDateString('es-AR');
+      const delta=m.points_delta;
+      return `<li><span>${esc(m.description)}<br><small class="muted">${esc(date)}</small></span><b class="${delta<0?'neg':'pos'}">${delta?(delta>0?'+':'')+delta+' pts':''}</b></li>`;
+    }).join('')}</ul>`:'<p class="muted">Todavía no tenés movimientos. Cuando sumes puntos o sellos, aparecen acá.</p>'}
+  </section></div>`;
+}
+function renderAdmin(){
+  const totalPoints=users.reduce((sum,user)=>sum+user.points,0);
+  const totalStamps=users.reduce((sum,user)=>sum+user.stamps,0);
+  $('#app').innerHTML=`<div class="wrap"><h1>Panel de administración</h1>
+  <div class="stats"><div class="card"><b>${users.length}</b><span class="muted">Usuarios</span></div><div class="card"><b>${totalPoints}</b><span class="muted">Puntos activos</span></div><div class="card"><b>${totalStamps}</b><span class="muted">Sellos activos</span></div></div>
+  <section class="card" style="margin-top:16px"><h2>Nueva cuenta</h2>
+    <form class="form" id="nf" style="margin-top:12px" autocomplete="off">
+      <div><label for="nn">Nombre completo</label><input id="nn" required></div>
+      <div><label for="nu">Usuario</label><input id="nu" required></div>
+      <div><label for="ne">Correo electrónico</label><input id="ne" type="email" required></div>
+      <div><label for="np">Contraseña temporal</label><input id="np" type="password" minlength="6" required></div>
+      <div><label for="nr">Tipo de cuenta</label><select id="nr"><option value="member">Cliente</option><option value="admin">Administrador</option></select></div>
+      <button class="btn go" type="submit">Crear cuenta</button>
+    </form><div class="err" id="nerr" aria-live="polite"></div>
+    <p class="muted">Si Supabase requiere confirmar el correo, la cuenta podrá ingresar después de confirmar el mensaje enviado.</p></section>
+  <section class="card" style="margin-top:16px"><h2>Usuarios</h2>
+    ${users.length?users.map(user=>`<div class="urow" data-u="${esc(user.id)}">
+      <div class="uhead"><span><b>${esc(user.full_name||user.username)}</b> <span class="muted">@${esc(user.username)}</span></span>
+        <span><b class="pos">${user.points} pts</b> &nbsp; <span class="mini" style="display:inline-flex">${Array.from({length:MAX},(_,i)=>`<i class="${i<user.stamps?'on':''}"></i>`).join('')}</span></span></div>
+      <div class="ctrls">
+        <input type="number" min="1" step="1" value="10" aria-label="Cantidad de puntos">
+        <button class="btn sm" data-act="add">Sumar puntos</button>
+        <button class="btn ghost sm" data-act="sub">Restar</button>
+        <button class="btn go sm" data-act="st+" ${user.stamps>=MAX?'disabled':''}>+ Sello</button>
+        <button class="btn ghost sm" data-act="st-" ${user.stamps<=0?'disabled':''}>− Sello</button>
+        <button class="btn alt sm" data-act="redeem" ${user.stamps<MAX?'disabled':''}>Canjear tarjeta</button>
+        <button class="btn ghost sm" data-act="promote">Hacer administrador</button>
+      </div></div>`).join(''):'<p class="muted">Todavía no hay usuarios registrados.</p>'}
+  </section></div>`;
+  $('#nf').onsubmit=async event=>{
+    event.preventDefault();
+    const button=$('#nf button[type="submit"]');button.disabled=true;showError('','#nerr');
+    const username=$('#nu').value.trim().toLowerCase();
+    const fullName=$('#nn').value.trim();
+    const email=$('#ne').value.trim();
+    const password=$('#np').value;
+    const role=$('#nr').value;
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      showError('El usuario debe tener entre 3 y 30 caracteres: letras, números, punto, guion o guion bajo.','#nerr');
+      button.disabled=false;return;
+    }
+    if(users.some(user=>user.username.toLowerCase()===username)){
+      showError('Ese nombre de usuario ya existe.','#nerr');button.disabled=false;return;
+    }
+    const {createClient}=window.supabase;
+    const signupClient=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
+      auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
+    });
+    const {data,error}=await signupClient.auth.signUp({
+      email,password,options:{data:{username,full_name:fullName}}
+    });
+    if(error){button.disabled=false;showError(`No se pudo crear la cuenta: ${error.message}`,'#nerr');return}
+    if(role==='admin'){
+      if(!data.user){
+        button.disabled=false;
+        showError('La cuenta se registró, pero Supabase no devolvió su identificador y no se pudieron asignar permisos de administrador.','#nerr');
+        return;
+      }
+      const {error:roleError}=await db.rpc('set_profile_role',{p_user_id:data.user.id,p_role:'admin'});
+      if(roleError){
+        button.disabled=false;
+        showError(`La cuenta se creó, pero no se pudieron asignar permisos de administrador: ${roleError.message}`,'#nerr');
+        return;
+      }
+    }
+    button.disabled=false;
+    $('#nf').reset();
+    toast(role==='admin'?'Cuenta de administrador creada':'Cuenta de cliente creada');
+    await loadProfile();
+  };
+}
+async function adminAction(action,userId,amount){
+  let result;
+  if(action==='add')result=await db.rpc('add_points',{p_user_id:userId,p_amount:amount});
+  if(action==='sub')result=await db.rpc('remove_points',{p_user_id:userId,p_amount:amount});
+  if(action==='st+')result=await db.rpc('change_stamps',{p_user_id:userId,p_delta:1});
+  if(action==='st-')result=await db.rpc('change_stamps',{p_user_id:userId,p_delta:-1});
+  if(action==='redeem')result=await db.rpc('redeem_card',{p_user_id:userId});
+  if(action==='promote')result=await db.rpc('set_profile_role',{p_user_id:userId,p_role:'admin'});
+  if(result.error)throw result.error;
+  await loadProfile();
+  toast(action==='promote'?'Permisos de administrador asignados':'Cambio guardado');
+}
+document.addEventListener('click',async event=>{
+  const button=event.target.closest('[data-act]');if(!button)return;
+  if(button.dataset.act==='out'){
+    const {error}=await db.auth.signOut();
+    if(error){toast(`No se pudo cerrar sesión: ${error.message}`);return}
+    profile=null;users=[];movements=[];renderLogin();return;
+  }
+  if(profile?.role!=='admin')return;
+  const row=button.closest('[data-u]');if(!row)return;
+  const amount=Number(row.querySelector('input').value);
+  if(['add','sub'].includes(button.dataset.act)&&(!Number.isSafeInteger(amount)||amount<1)){
+    toast('Ingresá una cantidad de puntos válida.');return;
+  }
+  button.disabled=true;
+  try{await adminAction(button.dataset.act,row.dataset.u,amount)}
+  catch(error){toast(`No se pudo guardar el cambio: ${error.message}`);button.disabled=false}
+});
+async function init(){
+  if(configIsMissing())return renderSetup();
+  if(!window.supabase){showError('No se pudo cargar Supabase. Revisá tu conexión e intentá recargar.');return}
+  const {createClient}=window.supabase;
+  db=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  try{await loadProfile()}
+  catch(error){profile=null;$('#app').innerHTML=`<div class="wrap"><p class="err">No se pudieron cargar los datos de Supabase: ${esc(error.message)}</p></div>`}
+}
+init();
+</script>
+</body>
+</html>
