@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/Sellos%20y%20Puntos.html"
+    }
+  ]
+}
